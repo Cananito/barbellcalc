@@ -1,7 +1,14 @@
+/**
+ * Globals.
+ */
 let inputTextField;
 let resultLabel;
 let wasmObj;
 
+
+/**
+ * WASM helper functions.
+ */
 function stringFromNullTerminatedCCharPointer(cCharPointer) {
   const wasmMemoryBuffer = wasmObj.instance.exports.memory.buffer;
   let stringBuffer = new Uint8Array(wasmMemoryBuffer, cCharPointer);
@@ -24,6 +31,11 @@ function writeStringToWASMMemoryBuffer(string, destinationBufferPointer) {
                                            length);
   destinationBuffer.set(stringBuffer);
 }
+
+
+/**
+ * Event handlers.
+ */
 
 function inputTextFieldHandler(event) {
   const exports = wasmObj.instance.exports;
@@ -49,9 +61,12 @@ function initializeUI() {
   body.appendChild(resultLabel);
 }
 
+/**
+ * main.
+ */
+
 function main() {
   initializeUI();
-
   const wasmPromise = WebAssembly.instantiateStreaming(fetch("calc.wasm"), {});
   wasmPromise.then(function (obj) {
     wasmObj = obj;
