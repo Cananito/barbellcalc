@@ -1,7 +1,15 @@
 let resultLabel;
 let wasmObj;
 
-function stringFromCCharPointer(cCharPointer) {
+// TODO: Delete if never used.
+function stringFromCCharPointer(cCharPointer, length) {
+  const wasmMemoryBuffer = wasmObj.instance.exports.memory.buffer;
+  const stringBuffer = new Uint8Array(wasmMemoryBuffer, cCharPointer, length);
+  let string = new TextDecoder().decode(stringBuffer);
+  return string;
+}
+
+function stringFromNullTerminatedCCharPointer(cCharPointer) {
   const wasmMemoryBuffer = wasmObj.instance.exports.memory.buffer;
   let stringBuffer = new Uint8Array(wasmMemoryBuffer, cCharPointer);
   for (let i = 0; i < stringBuffer.byteLength; i++) {
@@ -24,6 +32,16 @@ function writeStringToWASMMemoryBuffer(string, destinationBufferPointer) {
   destinationBuffer.set(stringBuffer);
 }
 
+function cStringToInt(cStringCCharPointer) {
+  const string = stringFromNullTerminatedCCharPointer(cStringCCharPointer);
+  return parseInt(string);
+}
+
+function intToCString(i, destinationBufferPointer) {
+  const string = i.toString();
+  writeStringToWASMMemoryBuffer(string, destinationBufferPointer);
+}
+
 function initializeUI() {
   const body = document.body;
 
@@ -35,16 +53,23 @@ function initializeUI() {
 function main() {
   initializeUI();
 
-  const wasmPromise = WebAssembly.instantiateStreaming(fetch("calc.wasm"), {});
+  const importObject = {
+    env: {
+      "string_to_int": cStringToInt,
+      "int_to_string": intToCString,
+    },
+  };
+  const wasmPromise = WebAssembly.instantiateStreaming(fetch("calc.wasm"),
+                                                       importObject);
   wasmPromise.then(function (obj) {
     wasmObj = obj;
     const exports = obj.instance.exports;
 
     const platesStringBufferPointer = exports.js_plates_string_buffer;
-    writeStringToWASMMemoryBuffer("45,45", platesStringBufferPointer);
+    writeStringToWASMMemoryBuffer("45", platesStringBufferPointer);
     const resultPointer =
         exports.calc_weight_from_plates(platesStringBufferPointer);
-    const result = stringFromCCharPointer(resultPointer);
+    const result = stringFromNullTerminatedCCharPointer(resultPointer);
     resultLabel.innerHTML = "Result: " + result;
   });
 };
