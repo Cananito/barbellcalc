@@ -4,6 +4,14 @@
 
 CFLAGS=-Wall -Wextra -Werror
 
+build: barbellcalc
+
+install: barbellcalc
+	cp barbellcalc /usr/local/bin/barbellcalc
+
+uninstall:
+	rm -f /usr/local/bin/barbellcalc
+
 run: barbellcalc
 	./barbellcalc
 
@@ -27,10 +35,10 @@ clean:
 ###
 
 build-wasm: calc.c
-	clang --target=wasm32 -nostdlib -Wl,--no-entry -Wl,--export-all -Wl,--allow-undefined -o calc.wasm calc.c
+	$(CC) --target=wasm32 -nostdlib -Wl,--no-entry -Wl,--export-all -Wl,--allow-undefined -o calc.wasm calc.c
 
 build-wasm-debug: calc.c
-	clang -O0 -g --target=wasm32 -nostdlib -Wl,--no-entry -Wl,--export-all -Wl,--allow-undefined -o calc.wasm calc.
+	$(CC) -O0 -g --target=wasm32 -nostdlib -Wl,--no-entry -Wl,--export-all -Wl,--allow-undefined -o calc.wasm calc.
 
 server:
 	python3 -m http.server 9999
