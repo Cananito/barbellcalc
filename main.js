@@ -1,3 +1,4 @@
+let inputTextField;
 let resultLabel;
 let wasmObj;
 
@@ -24,11 +25,27 @@ function writeStringToWASMMemoryBuffer(string, destinationBufferPointer) {
   destinationBuffer.set(stringBuffer);
 }
 
+function inputTextFieldHandler(event) {
+  const exports = wasmObj.instance.exports;
+  const platesStringBufferPointer = exports.js_plates_string_buffer;
+  writeStringToWASMMemoryBuffer(inputTextField.value, platesStringBufferPointer);
+  const resultPointer =
+      exports.calc_weight_from_plates(platesStringBufferPointer);
+  const result = stringFromNullTerminatedCCharPointer(resultPointer);
+  resultLabel.innerHTML = "Result: " + result;
+}
+
 function initializeUI() {
   const body = document.body;
 
+  inputTextField = document.createElement("input");
+  inputTextField.type = "text";
+  inputTextField.oninput = inputTextFieldHandler;
+  body.appendChild(inputTextField);
+
+  body.appendChild(document.createElement("br"));
+
   resultLabel = document.createElement("span");
-  resultLabel.innerHTML = "Loading...";
   body.appendChild(resultLabel);
 }
 
@@ -38,14 +55,7 @@ function main() {
   const wasmPromise = WebAssembly.instantiateStreaming(fetch("calc.wasm"), {});
   wasmPromise.then(function (obj) {
     wasmObj = obj;
-    const exports = obj.instance.exports;
-
-    const platesStringBufferPointer = exports.js_plates_string_buffer;
-    writeStringToWASMMemoryBuffer("45,45", platesStringBufferPointer);
-    const resultPointer =
-        exports.calc_weight_from_plates(platesStringBufferPointer);
-    const result = stringFromNullTerminatedCCharPointer(resultPointer);
-    resultLabel.innerHTML = "Result: " + result;
+    inputTextFieldHandler(null);
   });
 };
 document.addEventListener("DOMContentLoaded", main);
