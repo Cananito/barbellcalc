@@ -1,10 +1,4 @@
 /**
- * Functions delegated out to platform-specific code.
- */
-extern int string_to_int(char* string);
-extern void int_to_string(int i, char* destination);
-
-/**
  * Buffer for the web app to write the plates user input.
  *
  * Example of the longest likely string is 30 characters:
@@ -14,33 +8,83 @@ extern void int_to_string(int i, char* destination);
  */
 char js_plates_string_buffer[60] = { 0 };
 
-/**
- * Buffer for the web app to write the conversion from int to string.
- *
- * This will usually be a number no greater than "670\0".
- */
-char js_int_to_string_buffer[8] = { 0 };
+static void r_int_to_string(int v, char* dest) {
+  int i = 0;
+  int curr = v;
+
+  // Minus sign.
+  if (curr < 0) {
+    dest[i] = '-';
+    curr = -curr;
+    i++;
+  }
+
+  // Build string in reverse order.
+  int j = 0;
+  char reverse_num_str[10];
+  while (curr > 0) {
+    char ascii = (curr % 10) + 48;
+    reverse_num_str[j] = ascii;
+    j++;
+    curr /= 10;
+  }
+  j--;
+
+  // Transfer over in correct order.
+  while (j >= 0) {
+    dest[i] = reverse_num_str[j];
+    i++;
+    j--;
+  }
+
+  // Null terminate.
+  dest[i] = '\0';
+}
+
+static int r_str_len(char* str) {
+  int len = 0;
+  while (str[len] != '\0') {
+    len++;
+  }
+  return len;
+}
+static int r_string_to_int(char* str) {
+  int result = 0;
+  int len = r_str_len(str);
+  int is_negative = 0;
+  for (int i = 0; i < len; i++) {
+    char ascii = str[i];
+    if (ascii == 45) {
+      is_negative = 1;
+      continue;
+    }
+    if (ascii < 48 || ascii > 57) {
+      // Ignore this character and the remainder of the string.
+      break;
+    }
+    result = (result * 10) + (ascii - 48);
+  }
+  if (is_negative) {
+    result = -result;
+  }
+  return result;
+}
 
 static char calc_weight_from_plates_dest[8] = { 0 };
 static void clear_calc_weight_from_plates_dest(void) {
-  calc_weight_from_plates_dest[0] = 0;
-  calc_weight_from_plates_dest[1] = 0;
-  calc_weight_from_plates_dest[2] = 0;
-  calc_weight_from_plates_dest[3] = 0;
-  calc_weight_from_plates_dest[4] = 0;
-  calc_weight_from_plates_dest[5] = 0;
-  calc_weight_from_plates_dest[6] = 0;
-  calc_weight_from_plates_dest[7] = 0;
+  for (int i = 0; i < 8; i++) {
+    calc_weight_from_plates_dest[i] = 0;
+  }
 }
 char* calc_weight_from_plates(char* plates) {
   clear_calc_weight_from_plates_dest();
 
   // TODO: Convert plates to array of strings first! Temporarily passing as is.
-  int i = string_to_int(plates);
+  int i = r_string_to_int(plates);
   const int plates_total_weight = i * 2;
   const int bar_weight = 45;
   const int total_weight = bar_weight + plates_total_weight;
 
-  int_to_string(total_weight, calc_weight_from_plates_dest);
+  r_int_to_string(total_weight, calc_weight_from_plates_dest);
   return calc_weight_from_plates_dest;
 }
