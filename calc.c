@@ -8,6 +8,14 @@
  */
 char js_text_input_string_buffer[60] = { 0 };
 
+static int r_str_len(char* str) {
+  int len = 0;
+  while (str[len] != '\0') {
+    len++;
+  }
+  return len;
+}
+
 static int r_is_digit(char c) {
   return c >= 48 && c <= 57;
 }
@@ -18,6 +26,7 @@ static int r_is_separator(char c) {
       c == ',' ||
       c == '|' ||
       c == '/' ||
+      c == '\'' ||
       c == '-';
 }
 
@@ -124,13 +133,74 @@ static void clear_calc_weight_to_plates_dest(void) {
     calc_plates_to_weight_dest[i] = 0;
   }
 }
-char* calc_weight_to_plates(__attribute__((unused)) char* weight) {
+char* calc_weight_to_plates(char* weight) {
   clear_calc_weight_to_plates_dest();
 
-  // TODO: Implement for real!
-  calc_weight_to_plates_dest[0] = '4';
-  calc_weight_to_plates_dest[1] = '5';
-  calc_weight_to_plates_dest[2] = '\0';
+  int curr_weight = r_str_to_int(weight, r_str_len(weight));
+
+  if (curr_weight < 45) {
+    return calc_weight_to_plates_dest;
+  }
+
+  curr_weight -= 45;
+  curr_weight /= 2;
+  int i = 0;
+  while (curr_weight > 0) {
+    if (curr_weight >= 45) {
+      calc_weight_to_plates_dest[i] = '4';
+      i++;
+      calc_weight_to_plates_dest[i] = '5';
+      i++;
+      calc_weight_to_plates_dest[i] = ',';
+      i++;
+      curr_weight -= 45;
+    } else if (curr_weight >= 25) {
+      calc_weight_to_plates_dest[i] = '2';
+      i++;
+      calc_weight_to_plates_dest[i] = '5';
+      i++;
+      calc_weight_to_plates_dest[i] = ',';
+      i++;
+      curr_weight -= 25;
+    } else if (curr_weight >= 10) {
+      calc_weight_to_plates_dest[i] = '1';
+      i++;
+      calc_weight_to_plates_dest[i] = '0';
+      i++;
+      calc_weight_to_plates_dest[i] = ',';
+      i++;
+      curr_weight -= 10;
+    } else if (curr_weight >= 5) {
+      calc_weight_to_plates_dest[i] = '5';
+      i++;
+      calc_weight_to_plates_dest[i] = ',';
+      i++;
+      curr_weight -= 5;
+    } else if (curr_weight >= 2) { // TODO: Change to 2.5 after float support.
+      calc_weight_to_plates_dest[i] = '2';
+      i++;
+      calc_weight_to_plates_dest[i] = '.';
+      i++;
+      calc_weight_to_plates_dest[i] = '5';
+      i++;
+      calc_weight_to_plates_dest[i] = ',';
+      i++;
+      curr_weight -= 2.5;
+    } else {
+      calc_weight_to_plates_dest[i] = '1';
+      i++;
+      calc_weight_to_plates_dest[i] = ',';
+      i++;
+      curr_weight -= 1;
+    }
+  }
+
+  // If last char is a comma, replace it with null terminator. Otherwsie append.
+  if (i > 0 && calc_weight_to_plates_dest[i-1] == ',') {
+    calc_weight_to_plates_dest[i-1] = '\0';
+  } else {
+    calc_weight_to_plates_dest[i] = '\0';
+  }
 
   return calc_weight_to_plates_dest;
 }
