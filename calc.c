@@ -8,6 +8,7 @@
  */
 char js_text_input_string_buffer[60] = { 0 };
 
+// TODO: Update to double!
 static void r_int_to_string(int v, char* dest) {
   int i = 0;
   int curr = v;
@@ -49,9 +50,9 @@ static int r_str_len(char* str) {
   return len;
 }
 
-static int r_string_to_int(char* str) {
+// TODO: Update to double!
+static int r_string_to_int(char* str, int len) {
   int result = 0;
-  int len = r_str_len(str);
   int is_negative = 0;
   for (int i = 0; i < len; i++) {
     char ascii = str[i];
@@ -81,7 +82,8 @@ char* calc_plates_to_weight(char* plates) {
   clear_calc_plates_to_weight_dest();
 
   // TODO: Convert plates to array of strings first! Temporarily passing as is.
-  int i = r_string_to_int(plates);
+  const int len = r_str_len(plates);
+  const int i = r_string_to_int(plates, len);
   const int plates_total_weight = i * 2;
   const int bar_weight = 45;
   const int total_weight = bar_weight + plates_total_weight;
