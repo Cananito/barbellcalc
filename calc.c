@@ -8,8 +8,16 @@
  */
 char js_text_input_string_buffer[60] = { 0 };
 
+static int r_str_len(char* str) {
+  int len = 0;
+  while (str[len] != '\0') {
+    len++;
+  }
+  return len;
+}
+
 // TODO: Update to double!
-static void r_int_to_string(int v, char* dest) {
+static void r_int_to_str(int v, char* dest) {
   int i = 0;
   int curr = v;
 
@@ -42,16 +50,8 @@ static void r_int_to_string(int v, char* dest) {
   dest[i] = '\0';
 }
 
-static int r_str_len(char* str) {
-  int len = 0;
-  while (str[len] != '\0') {
-    len++;
-  }
-  return len;
-}
-
 // TODO: Update to double!
-static int r_string_to_int(char* str, int len) {
+static int r_str_to_int(char* str, int len) {
   int result = 0;
   int is_negative = 0;
   for (int i = 0; i < len; i++) {
@@ -83,12 +83,12 @@ char* calc_plates_to_weight(char* plates) {
 
   // TODO: Convert plates to array of strings first! Temporarily passing as is.
   const int len = r_str_len(plates);
-  const int i = r_string_to_int(plates, len);
+  const int i = r_str_to_int(plates, len);
   const int plates_total_weight = i * 2;
   const int bar_weight = 45;
   const int total_weight = bar_weight + plates_total_weight;
 
-  r_int_to_string(total_weight, calc_plates_to_weight_dest);
+  r_int_to_str(total_weight, calc_plates_to_weight_dest);
   return calc_plates_to_weight_dest;
 }
 
