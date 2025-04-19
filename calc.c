@@ -148,7 +148,7 @@ char* calc_plates_to_weight(char* plates) {
 static char calc_weight_to_plates_dest[60] = { 0 };
 static void clear_calc_weight_to_plates_dest(void) {
   for (int i = 0; i < 60; i++) {
-    calc_plates_to_weight_dest[i] = 0;
+    calc_weight_to_plates_dest[i] = 0;
   }
 }
 char* calc_weight_to_plates(char* weight) {
@@ -164,6 +164,10 @@ char* calc_weight_to_plates(char* weight) {
   curr_weight /= 2;
   int i = 0;
   while (curr_weight > 0) {
+    if (i >= 59) {
+      clear_calc_weight_to_plates_dest();
+      return calc_weight_to_plates_dest;
+    }
     if (curr_weight >= 45) {
       calc_weight_to_plates_dest[i] = '4';
       i++;

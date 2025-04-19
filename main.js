@@ -37,18 +37,30 @@ function writeStringToWASMMemoryBuffer(string, destinationBufferPointer) {
  * Event handlers.
  */
 function platesTextFieldEventHandler(event) {
+  const input = platesTextField.value;
+  if (input.length > 58) {
+    // Prevent overflow of js_text_input_string_buffer;
+    weightTextField.value = "";
+    return;
+  }
   const exports = wasmObj.instance.exports;
   const textInputStringBuffer = exports.js_text_input_string_buffer;
-  writeStringToWASMMemoryBuffer(platesTextField.value, textInputStringBuffer);
+  writeStringToWASMMemoryBuffer(input, textInputStringBuffer);
   const resultPointer = exports.calc_plates_to_weight(textInputStringBuffer);
   const result = stringFromNullTerminatedCCharPointer(resultPointer);
   weightTextField.value = result;
 }
 
 function weightTextFieldEventHandler(event) {
+  const input = weightTextField.value;
+  if (input.length > 58) {
+    // Prevent overflow of js_text_input_string_buffer;
+    platesTextField.value = "";
+    return;
+  }
   const exports = wasmObj.instance.exports;
   const textInputStringBuffer = exports.js_text_input_string_buffer;
-  writeStringToWASMMemoryBuffer(weightTextField.value, textInputStringBuffer);
+  writeStringToWASMMemoryBuffer(input, textInputStringBuffer);
   const resultPointer = exports.calc_weight_to_plates(textInputStringBuffer);
   const result = stringFromNullTerminatedCCharPointer(resultPointer);
   platesTextField.value = result;
