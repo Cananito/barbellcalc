@@ -48,6 +48,7 @@ static int r_str_len(char* str) {
   }
   return len;
 }
+
 static int r_string_to_int(char* str) {
   int result = 0;
   int len = r_str_len(str);
@@ -87,4 +88,21 @@ char* calc_plates_to_weight(char* plates) {
 
   r_int_to_string(total_weight, calc_plates_to_weight_dest);
   return calc_plates_to_weight_dest;
+}
+
+static char calc_weight_to_plates_dest[60] = { 0 };
+static void clear_calc_weight_to_plates_dest(void) {
+  for (int i = 0; i < 60; i++) {
+    calc_plates_to_weight_dest[i] = 0;
+  }
+}
+char* calc_weight_to_plates(__attribute__((unused)) char* weight) {
+  clear_calc_weight_to_plates_dest();
+
+  // TODO: Implement for real!
+  calc_weight_to_plates_dest[0] = '4';
+  calc_weight_to_plates_dest[1] = '5';
+  calc_weight_to_plates_dest[2] = '\0';
+
+  return calc_weight_to_plates_dest;
 }
