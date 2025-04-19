@@ -8,12 +8,17 @@
  */
 char js_text_input_string_buffer[60] = { 0 };
 
-static int r_str_len(char* str) {
-  int len = 0;
-  while (str[len] != '\0') {
-    len++;
-  }
-  return len;
+static int r_is_digit(char c) {
+  return c >= 48 && c <= 57;
+}
+
+static int r_is_separator(char c) {
+  return
+      c == ' ' ||
+      c == ',' ||
+      c == '|' ||
+      c == '/' ||
+      c == '-';
 }
 
 // TODO: Update to double!
@@ -56,11 +61,11 @@ static int r_str_to_int(char* str, int len) {
   int is_negative = 0;
   for (int i = 0; i < len; i++) {
     char ascii = str[i];
-    if (ascii == 45) {
+    if (ascii == '-') {
       is_negative = 1;
       continue;
     }
-    if (ascii < 48 || ascii > 57) {
+    if (!r_is_digit(ascii)) {
       // Ignore this character and the remainder of the string.
       break;
     }
@@ -81,10 +86,31 @@ static void clear_calc_plates_to_weight_dest(void) {
 char* calc_plates_to_weight(char* plates) {
   clear_calc_plates_to_weight_dest();
 
-  // TODO: Convert plates to array of strings first! Temporarily passing as is.
-  const int len = r_str_len(plates);
-  const int i = r_str_to_int(plates, len);
-  const int plates_total_weight = i * 2;
+  int one_side_plates_total_weight = 0;
+  char* curr_start = plates;
+  char* curr_char = plates;
+  int curr_len = 1;
+  while (1) {
+    if (r_is_digit(curr_char[0])) {
+      curr_len++;
+      curr_char++;
+    } else if (r_is_separator(curr_char[0])) {
+      one_side_plates_total_weight += r_str_to_int(curr_start, curr_len);
+      curr_start = curr_start + curr_len;
+      curr_char = curr_start;
+      curr_len = 1;
+    } else if (curr_char[0] == '\0') {
+      one_side_plates_total_weight += r_str_to_int(curr_start, curr_len - 1);
+      break;
+    } else {
+      // Invalid input, return "0".
+      calc_plates_to_weight_dest[0] = '0';
+      calc_plates_to_weight_dest[1] = '\0';
+      return calc_plates_to_weight_dest;
+    }
+  }
+
+  const int plates_total_weight = one_side_plates_total_weight * 2;
   const int bar_weight = 45;
   const int total_weight = bar_weight + plates_total_weight;
 
