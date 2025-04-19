@@ -1,2 +1,2 @@
 // TODO: add proper const modifiers.
-char* calc_weight_from_plates(char* plates);
+char* calc_plates_to_weight(char* plates);

@@ -1,6 +1,8 @@
 /**
  * Globals.
  */
+let platesToWeightOption;
+let weightToPlatesOption;
 let inputTextField;
 let resultLabel;
 let wasmObj;
@@ -37,24 +39,59 @@ function writeStringToWASMMemoryBuffer(string, destinationBufferPointer) {
  * Event handlers.
  */
 
-function inputTextFieldHandler(event) {
+function inputTextFieldEventHandler(event) {
   const exports = wasmObj.instance.exports;
-  const platesStringBufferPointer = exports.js_plates_string_buffer;
-  writeStringToWASMMemoryBuffer(inputTextField.value, platesStringBufferPointer);
-  const resultPointer =
-      exports.calc_weight_from_plates(platesStringBufferPointer);
+  const textInputStringBuffer = exports.js_text_input_string_buffer;
+  writeStringToWASMMemoryBuffer(inputTextField.value, textInputStringBuffer);
+  let resultPointer;
+  if (platesToWeightOption.checked) {
+    resultPointer = exports.calc_plates_to_weight(textInputStringBuffer);
+  } else {
+    // TODO: Update to the right function!
+    resultPointer = exports.calc_plates_to_weight(textInputStringBuffer);
+  }
   const result = stringFromNullTerminatedCCharPointer(resultPointer);
   resultLabel.innerHTML = "Result: " + result;
+}
+
+function platesToWeightOptionEventHandler(event) {
+  weightToPlatesOption.checked = false;
+}
+
+function weightToPlatesOptionEventHandler(event) {
+  platesToWeightOption.checked = false;
 }
 
 function initializeUI() {
   const body = document.body;
 
+  let conversionFieldset = document.createElement("fieldset");
+  platesToWeightOption = document.createElement("input");
+  platesToWeightOption.type = "radio";
+  platesToWeightOption.checked = true;
+  platesToWeightOption.oninput = platesToWeightOptionEventHandler;
+  let platesToWeightOptionLabel = document.createElement("label");
+  platesToWeightOptionLabel.innerHTML = "Plates to weight";
+  weightToPlatesOption = document.createElement("input");
+  weightToPlatesOption.type = "radio";
+  weightToPlatesOption.checked = false;
+  weightToPlatesOption.oninput = weightToPlatesOptionEventHandler;
+  let weightToPlatesOptionLabel = document.createElement("label");
+  weightToPlatesOptionLabel.innerHTML = "Weight to plates";
+  conversionFieldset.appendChild(platesToWeightOption);
+  conversionFieldset.appendChild(platesToWeightOptionLabel);
+  conversionFieldset.appendChild(weightToPlatesOption);
+  conversionFieldset.appendChild(weightToPlatesOptionLabel);
+  body.appendChild(conversionFieldset);
+
+  body.appendChild(document.createElement("br"));
+
   inputTextField = document.createElement("input");
   inputTextField.type = "text";
-  inputTextField.oninput = inputTextFieldHandler;
+  inputTextField.oninput = inputTextFieldEventHandler;
   body.appendChild(inputTextField);
 
+  body.appendChild(document.createElement("br"));
   body.appendChild(document.createElement("br"));
 
   resultLabel = document.createElement("span");
@@ -70,7 +107,7 @@ function main() {
   const wasmPromise = WebAssembly.instantiateStreaming(fetch("calc.wasm"), {});
   wasmPromise.then(function (obj) {
     wasmObj = obj;
-    inputTextFieldHandler(null);
+    inputTextFieldEventHandler(null);
   });
 };
 document.addEventListener("DOMContentLoaded", main);

@@ -6,7 +6,7 @@
  *
  * So we'll just double it to 60.
  */
-char js_plates_string_buffer[60] = { 0 };
+char js_text_input_string_buffer[60] = { 0 };
 
 static void r_int_to_string(int v, char* dest) {
   int i = 0;
@@ -70,14 +70,14 @@ static int r_string_to_int(char* str) {
   return result;
 }
 
-static char calc_weight_from_plates_dest[8] = { 0 };
-static void clear_calc_weight_from_plates_dest(void) {
+static char calc_plates_to_weight_dest[8] = { 0 };
+static void clear_calc_plates_to_weight_dest(void) {
   for (int i = 0; i < 8; i++) {
-    calc_weight_from_plates_dest[i] = 0;
+    calc_plates_to_weight_dest[i] = 0;
   }
 }
-char* calc_weight_from_plates(char* plates) {
-  clear_calc_weight_from_plates_dest();
+char* calc_plates_to_weight(char* plates) {
+  clear_calc_plates_to_weight_dest();
 
   // TODO: Convert plates to array of strings first! Temporarily passing as is.
   int i = r_string_to_int(plates);
@@ -85,6 +85,6 @@ char* calc_weight_from_plates(char* plates) {
   const int bar_weight = 45;
   const int total_weight = bar_weight + plates_total_weight;
 
-  r_int_to_string(total_weight, calc_weight_from_plates_dest);
-  return calc_weight_from_plates_dest;
+  r_int_to_string(total_weight, calc_plates_to_weight_dest);
+  return calc_plates_to_weight_dest;
 }
