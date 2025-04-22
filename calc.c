@@ -88,7 +88,10 @@ static int r_str_to_int(char* str, int len) {
   int is_negative = 0;
   for (int i = 0; i < len; i++) {
     char ascii = str[i];
-    if (ascii == '-') {
+    if (ascii == ' ') {
+      continue;
+    }
+    if (!is_negative && ascii == '-') {
       is_negative = 1;
       continue;
     }
