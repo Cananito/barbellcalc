@@ -7,7 +7,7 @@ Requirements:
 
 1. A C compiler that supports WASM output
 1. Make
-1. Python3
+1. Python3 (for local serving of the web app)
 
 ## Building and Running
 
