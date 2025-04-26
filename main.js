@@ -4,8 +4,6 @@
 
 // TODO: Add URL to GitHub repo.
 
-// TODO: Dismiss mobile keyboard when tapping outside a text field.
-
 /**
  * Globals.
  */
@@ -115,12 +113,19 @@ function initializeUI() {
   weightTextField.oninput = weightTextFieldEventHandler;
   setDefaultStyleOnTextField(weightTextField);
   body.appendChild(weightTextField);
+
+  // Dismiss mobile keyboard when tapping outside a text field.
+  document.addEventListener("touchend", function(e) {
+    if (e.target !== platesTextField && e.target !== weightTextField) {
+      document.activeElement.blur();
+    }
+  });
 }
+
 
 /**
  * main.
  */
-
 function main() {
   initializeUI();
   const wasmPromise = WebAssembly.instantiateStreaming(fetch("calc.wasm"), {});
