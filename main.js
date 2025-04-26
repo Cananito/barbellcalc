@@ -75,14 +75,14 @@ function weightTextFieldEventHandler(event) {
 }
 
 function setDefaultStyleOnLabel(label) {
-  label.style.fontSize = "min(8vh, 8vw)";
+  label.style.fontSize = "8vmin";
 }
 
 function setDefaultStyleOnTextField(textField) {
   textField.type = "text";
   textField.style.width = "100%";
-  textField.style.height = "min(25vh, 25vw)";
-  textField.style.fontSize = "min(20vh, 20vw)";
+  textField.style.height = "25vmin";
+  textField.style.fontSize = "20vmin";
   textField.style.padding = "1px";
 }
 
