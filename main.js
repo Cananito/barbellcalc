@@ -1,3 +1,11 @@
+// TODO: Make it installable (PWA).
+
+// TODO: Add offline support.
+
+// TODO: Add URL to GitHub repo.
+
+// TODO: Maximize UI size, but keep in mind mobile keyboard.
+
 /**
  * Globals.
  */

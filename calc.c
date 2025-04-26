@@ -1,3 +1,5 @@
+// TODO: Add proper const modifiers.
+
 /**
  * Buffer for the web app to write the plates user input.
  *
@@ -49,6 +51,7 @@ static int r_is_separator(char c) {
 }
 
 // TODO: Update to double!
+// https://github.com/R32/wasm-c/blob/master/src/stdlib.c#L13
 static void r_int_to_str(int v, char* dest) {
   int i = 0;
   int curr = v;
@@ -83,6 +86,7 @@ static void r_int_to_str(int v, char* dest) {
 }
 
 // TODO: Update to double!
+// https://github.com/R32/wasm-c/blob/master/src/stdlib.c#L13
 static int r_str_to_int(char* str, int len) {
   int result = 0;
   int is_negative = 0;

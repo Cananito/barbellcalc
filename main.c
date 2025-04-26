@@ -5,8 +5,12 @@
 
 #include "calc.h"
 
+// TODO: Create man page.
+
 static void print_usage(void) {
-  printf("TODO: Implement help!\n");
+  printf("Usage:\n");
+  printf("  barbellcalc [-w weight] [--weight weight] [-p plates] "
+         "[--plates plates]\n");
 }
 
 static char* short_opts = "vhw:p:";
