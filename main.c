@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
           weight = optarg;
         }
         char* plates = calc_weight_to_plates(weight);
-        printf("Plates: %s\n", plates);
+        printf("Plates: %s lbs on each side\n", plates);
         return 0;
       }
       case '?': { // Unrecognized option.
