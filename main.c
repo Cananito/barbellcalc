@@ -4,54 +4,56 @@
 
 #include "calc.h"
 
-static void help(void) {
+static void print_usage(void) {
   printf("TODO: Implement help!\n");
 }
 
-static char* short_opts = "vh";
+static char* short_opts = "vhwp";
 static struct option long_opts[] = {
   { .name = "version", .has_arg = no_argument, .flag = 0, .val = 'v' },
   { .name = "help", .has_arg = no_argument, .flag = 0, .val = 'h' },
+  { .name = "weight", .has_arg = required_argument, .flag = 0, .val = 'w' },
+  { .name = "plates", .has_arg = required_argument, .flag = 0, .val = 'p' },
   { 0, 0, 0, 0 },
 };
 
 int main(int argc, char** argv) {
-  if (argc < 2) {
-    // If no arguments, print out help.
-    help();
-    return 0;
-  }
-
-  while (1) {
-    int option_index = 0;
-    int val = getopt_long(argc, argv, short_opts, long_opts, &option_index);
-
-    if (val == -1) {
-      // Nothing left.
-      break;
-    }
-
+  int val;
+  while ((val = getopt_long(argc, argv, short_opts, long_opts, NULL)) != -1) {
     switch (val) {
-      case 0: {
-        // TODO: Hardcoding and unreachable for now.
-        char* weight = calc_plates_to_weight("45,45");
-        printf("%s\n", weight);
-        break;
-      }
       case 'v': {
         printf("Version 1.0\n");
-        break;
+        return 0;
       }
       case 'h': {
-        help();
-        break;
+        print_usage();
+        return 0;
+      }
+      case 'w': {
+        // TODO: Override value to empty string if input is more than 58 chars.
+        // TODO: Hardcode for now.
+        char* weight = calc_plates_to_weight("45,45");
+        printf("%s lbs\n", weight);
+        return 0;
+      }
+      case 'p': {
+        // TODO: Override value to empty string if input is more than 58 chars.
+        // TODO: Hardcode for now.
+        char* plates = calc_weight_to_plates("235");
+        printf("%s\n", plates);
+        return 0;
       }
       case '?': { // Unrecognized option.
-        exit(EXIT_FAILURE);
-        break;
+        print_usage();
+        return 0;
+      }
+      default: {
+        print_usage();
+        return 0;
       }
     }
   }
-
+  // If no arguments, print usage.
+  print_usage();
   return 0;
 }
