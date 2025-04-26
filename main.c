@@ -8,7 +8,7 @@ static void print_usage(void) {
   printf("TODO: Implement help!\n");
 }
 
-static char* short_opts = "vhwp";
+static char* short_opts = "vhw:p:";
 static struct option long_opts[] = {
   { .name = "version", .has_arg = no_argument, .flag = 0, .val = 'v' },
   { .name = "help", .has_arg = no_argument, .flag = 0, .val = 'h' },
