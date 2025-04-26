@@ -74,16 +74,31 @@ function weightTextFieldEventHandler(event) {
   platesTextField.value = result;
 }
 
+function setDefaultStyleOnLabel(label) {
+  label.style.fontSize = "min(8vh, 8vw)";
+}
+
+function setDefaultStyleOnTextField(textField) {
+  textField.type = "text";
+  textField.style.width = "100%";
+  textField.style.height = "min(25vh, 25vw)";
+  textField.style.fontSize = "min(20vh, 20vw)";
+  textField.style.padding = "1px";
+}
+
 function initializeUI() {
   const body = document.body;
 
   platesLabel = document.createElement("span");
   platesLabel.innerHTML = "Plates (lbs): ";
+  setDefaultStyleOnLabel(platesLabel);
   body.appendChild(platesLabel);
 
+  body.appendChild(document.createElement("br"));
+
   platesTextField = document.createElement("input");
-  platesTextField.type = "text";
   platesTextField.oninput = platesTextFieldEventHandler;
+  setDefaultStyleOnTextField(platesTextField);
   body.appendChild(platesTextField);
 
   body.appendChild(document.createElement("br"));
@@ -91,11 +106,14 @@ function initializeUI() {
 
   weightLabel = document.createElement("span");
   weightLabel.innerHTML = "Weight (lbs): ";
+  setDefaultStyleOnLabel(weightLabel);
   body.appendChild(weightLabel);
 
+  body.appendChild(document.createElement("br"));
+
   weightTextField = document.createElement("input");
-  weightTextField.type = "text";
   weightTextField.oninput = weightTextFieldEventHandler;
+  setDefaultStyleOnTextField(weightTextField);
   body.appendChild(weightTextField);
 }
 
