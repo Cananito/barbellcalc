@@ -4,7 +4,7 @@
 
 // TODO: Add URL to GitHub repo.
 
-// TODO: Maximize UI size, but keep in mind mobile keyboard.
+// TODO: Dismiss mobile keyboard when tapping outside a text field.
 
 /**
  * Globals.
@@ -75,14 +75,14 @@ function weightTextFieldEventHandler(event) {
 }
 
 function setDefaultStyleOnLabel(label) {
-  label.style.fontSize = "8vmin";
+  label.style.fontSize = "6vmin";
 }
 
 function setDefaultStyleOnTextField(textField) {
   textField.type = "text";
   textField.style.width = "100%";
-  textField.style.height = "25vmin";
-  textField.style.fontSize = "20vmin";
+  textField.style.height = "12vmin";
+  textField.style.fontSize = "9vmin";
   textField.style.padding = "1px";
 }
 
