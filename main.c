@@ -1,6 +1,7 @@
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "calc.h"
 
@@ -30,17 +31,21 @@ int main(int argc, char** argv) {
         return 0;
       }
       case 'w': {
-        // TODO: Override value to empty string if input is more than 58 chars.
-        // TODO: Hardcode for now.
-        char* weight = calc_plates_to_weight("45,45");
-        printf("%s lbs\n", weight);
+        char* plates = "";
+        if (optarg && strlen(optarg) <= 58) {
+          plates = optarg;
+        }
+        char* weight = calc_plates_to_weight(plates);
+        printf("Weight: %s lbs\n", weight);
         return 0;
       }
       case 'p': {
-        // TODO: Override value to empty string if input is more than 58 chars.
-        // TODO: Hardcode for now.
-        char* plates = calc_weight_to_plates("235");
-        printf("%s\n", plates);
+        char* weight = "";
+        if (optarg && strlen(optarg) <= 58) {
+          weight = optarg;
+        }
+        char* plates = calc_weight_to_plates(weight);
+        printf("Plates: %s\n", plates);
         return 0;
       }
       case '?': { // Unrecognized option.
