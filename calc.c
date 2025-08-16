@@ -50,6 +50,8 @@ static int r_is_separator(char c) {
       c == '~';
 }
 
+// More accurate version:
+// https://github.com/R32/wasm-c/blob/daed77906372f5783b634494da09cfac7d1ea513/src/stdlib.c#L57
 static void r_int_to_str(int v, char* dest) {
   int i = 0;
   int curr = v;
@@ -86,6 +88,8 @@ static void r_int_to_str(int v, char* dest) {
 // TODO: Delete warning supression once the function is used!
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-function"
+// More accurate version:
+// https://github.com/R32/wasm-c/blob/daed77906372f5783b634494da09cfac7d1ea513/src/printf.c#L339
 static void r_double_to_str(double v, char* dest) {
   int i = 0;
   int curr_integer = (int)v;
@@ -137,6 +141,8 @@ static void r_double_to_str(double v, char* dest) {
 }
 #pragma clang diagnostic pop
 
+// More accurate version:
+// https://github.com/R32/wasm-c/blob/daed77906372f5783b634494da09cfac7d1ea513/src/printf.c#L281
 static int r_str_to_int(char* str, int len) {
   int result = 0;
   int is_negative = 0;
@@ -164,6 +170,8 @@ static int r_str_to_int(char* str, int len) {
 // TODO: Delete warning supression once the function is used!
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-function"
+// More accurate version:
+// https://github.com/R32/wasm-c/blob/daed77906372f5783b634494da09cfac7d1ea513/src/stdlib.c#L13
 static double r_str_to_double(char* str, int len) {
   double result = 0;
   char is_negative = 0;
