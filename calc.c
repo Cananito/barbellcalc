@@ -85,8 +85,7 @@ static void r_int_to_str(int v, char* dest) {
   dest[i] = '\0';
 }
 
-// TODO: Update to double!
-// https://github.com/R32/wasm-c/blob/master/src/stdlib.c#L13
+// TODO: Delete once migrated to the double version!
 static int r_str_to_int(char* str, int len) {
   int result = 0;
   int is_negative = 0;
@@ -110,6 +109,42 @@ static int r_str_to_int(char* str, int len) {
   }
   return result;
 }
+
+// TODO: Delete warning supression once the function is used!
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-function"
+static double r_str_to_double(char* str, int len) {
+  double result = 0;
+  int is_negative = 0;
+  int processing_decimals = 0;
+  double current_decimal_factor = 1;
+  for (int i = 0; i < len; i++) {
+    char ascii = str[i];
+    if (ascii == ' ') {
+      continue;
+    }
+    if (!is_negative && ascii == '-') {
+      is_negative = 1;
+      continue;
+    }
+    if (r_is_digit(ascii) && !processing_decimals) {
+      result = (result * 10) + (ascii - 48);
+    } else if (ascii == '.') {
+      processing_decimals = 1;
+    } else if (r_is_digit(ascii) && processing_decimals) {
+      current_decimal_factor /= 10;
+      result += (ascii - 48) * current_decimal_factor;
+    } else {
+      // Ignore this character and the remainder of the string.
+      break;
+    }
+  }
+  if (is_negative) {
+    result = -result;
+  }
+  return result;
+}
+#pragma clang diagnostic pop
 
 static char calc_plates_to_weight_dest[8] = { 0 };
 static void clear_calc_plates_to_weight_dest(void) {
