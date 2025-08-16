@@ -50,6 +50,8 @@ static int r_is_separator(char c) {
       c == '~';
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-function"
 // More accurate version:
 // https://github.com/R32/wasm-c/blob/daed77906372f5783b634494da09cfac7d1ea513/src/stdlib.c#L57
 static void r_int_to_str(int v, char* dest) {
@@ -84,10 +86,8 @@ static void r_int_to_str(int v, char* dest) {
   // Null terminate.
   dest[i] = '\0';
 }
+#pragma clang diagnostic pop
 
-// TODO: Delete warning supression once the function is used!
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-function"
 // More accurate version:
 // https://github.com/R32/wasm-c/blob/daed77906372f5783b634494da09cfac7d1ea513/src/printf.c#L339
 static void r_double_to_str(double v, char* dest) {
@@ -139,8 +139,9 @@ static void r_double_to_str(double v, char* dest) {
   // Null terminate.
   dest[i] = '\0';
 }
-#pragma clang diagnostic pop
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-function"
 // More accurate version:
 // https://github.com/R32/wasm-c/blob/daed77906372f5783b634494da09cfac7d1ea513/src/printf.c#L281
 static int r_str_to_int(char* str, int len) {
@@ -166,10 +167,8 @@ static int r_str_to_int(char* str, int len) {
   }
   return result;
 }
+#pragma clang diagnostic pop
 
-// TODO: Delete warning supression once the function is used!
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-function"
 // More accurate version:
 // https://github.com/R32/wasm-c/blob/daed77906372f5783b634494da09cfac7d1ea513/src/stdlib.c#L13
 static double r_str_to_double(char* str, int len) {
@@ -203,7 +202,6 @@ static double r_str_to_double(char* str, int len) {
   }
   return result;
 }
-#pragma clang diagnostic pop
 
 static char calc_plates_to_weight_dest[8] = { 0 };
 static void clear_calc_plates_to_weight_dest(void) {
@@ -214,21 +212,21 @@ static void clear_calc_plates_to_weight_dest(void) {
 char* calc_plates_to_weight(char* plates) {
   clear_calc_plates_to_weight_dest();
 
-  int one_side_plates_total_weight = 0;
+  double one_side_plates_total_weight = 0;
   char* curr_start = plates;
   char* curr_char = plates;
   int curr_len = 1;
   while (1) {
-    if (r_is_digit(curr_char[0])) {
+    if (r_is_digit(curr_char[0]) || curr_char[0] == '.') {
       curr_len++;
       curr_char++;
     } else if (r_is_separator(curr_char[0])) {
-      one_side_plates_total_weight += r_str_to_int(curr_start, curr_len);
+      one_side_plates_total_weight += r_str_to_double(curr_start, curr_len);
       curr_start = curr_start + curr_len;
       curr_char = curr_start;
       curr_len = 1;
     } else if (curr_char[0] == '\0') {
-      one_side_plates_total_weight += r_str_to_int(curr_start, curr_len - 1);
+      one_side_plates_total_weight += r_str_to_double(curr_start, curr_len - 1);
       break;
     } else {
       // Invalid input, return "0".
@@ -238,11 +236,15 @@ char* calc_plates_to_weight(char* plates) {
     }
   }
 
-  const int plates_total_weight = one_side_plates_total_weight * 2;
-  const int bar_weight = 45;
-  const int total_weight = bar_weight + plates_total_weight;
+  const double plates_total_weight = one_side_plates_total_weight * 2;
+  const double bar_weight = 45;
+  const double total_weight = bar_weight + plates_total_weight;
 
-  r_int_to_str(total_weight, calc_plates_to_weight_dest);
+  // TODO: Fix bug where "./barbellcalc -w 45,45,2.25" prints:
+  // "Weight: 229.5@ lbs" in the CLI.
+  // "229.559" in the web app.
+  // Expected output: "229.5"
+  r_double_to_str(total_weight, calc_plates_to_weight_dest);
   return calc_plates_to_weight_dest;
 }
 
@@ -255,7 +257,7 @@ static void clear_calc_weight_to_plates_dest(void) {
 char* calc_weight_to_plates(char* weight) {
   clear_calc_weight_to_plates_dest();
 
-  int curr_weight = r_str_to_int(weight, r_str_len(weight));
+  double curr_weight = r_str_to_double(weight, r_str_len(weight));
 
   if (curr_weight < 45) {
     return calc_weight_to_plates_dest;
@@ -299,7 +301,7 @@ char* calc_weight_to_plates(char* weight) {
       calc_weight_to_plates_dest[i] = ',';
       i++;
       curr_weight -= 5;
-    } else if (curr_weight >= 2) { // TODO: Change to 2.5 after float support.
+    } else if (curr_weight >= 2.5) {
       calc_weight_to_plates_dest[i] = '2';
       i++;
       calc_weight_to_plates_dest[i] = '.';
