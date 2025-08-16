@@ -112,9 +112,9 @@ static void r_double_to_str(double v, char* dest) {
     char ascii = (curr_decimal_value % 10) + 48;
     if (ascii != '0') {
       reverse_num_str[j] = ascii;
+      j++;
     }
     curr_decimal_value /= 10;
-    j++;
   }
   if (j > 0) {
     reverse_num_str[j] = '.';
@@ -124,8 +124,8 @@ static void r_double_to_str(double v, char* dest) {
   while (curr_integer > 0) {
     char ascii = (curr_integer % 10) + 48;
     reverse_num_str[j] = ascii;
-    curr_integer /= 10;
     j++;
+    curr_integer /= 10;
   }
   j--;
 
@@ -240,10 +240,6 @@ char* calc_plates_to_weight(char* plates) {
   const double bar_weight = 45;
   const double total_weight = bar_weight + plates_total_weight;
 
-  // TODO: Fix bug where "./barbellcalc -w 45,45,2.25" prints:
-  // "Weight: 229.5@ lbs" in the CLI.
-  // "229.559" in the web app.
-  // Expected output: "229.5"
   r_double_to_str(total_weight, calc_plates_to_weight_dest);
   return calc_plates_to_weight_dest;
 }
