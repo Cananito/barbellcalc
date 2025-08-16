@@ -50,8 +50,6 @@ static int r_is_separator(char c) {
       c == '~';
 }
 
-// TODO: Update to double!
-// https://github.com/R32/wasm-c/blob/master/src/stdlib.c#L13
 static void r_int_to_str(int v, char* dest) {
   int i = 0;
   int curr = v;
@@ -85,7 +83,60 @@ static void r_int_to_str(int v, char* dest) {
   dest[i] = '\0';
 }
 
-// TODO: Delete once migrated to the double version!
+// TODO: Delete warning supression once the function is used!
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-function"
+static void r_double_to_str(double v, char* dest) {
+  int i = 0;
+  int curr_integer = (int)v;
+  // 1000 to get float precision of 3.
+  int curr_decimal_value = ((double)(v - (int)v)) * 1000;
+
+  // Minus sign.
+  if (curr_integer < 0) {
+    dest[i] = '-';
+    curr_integer = -curr_integer;
+    curr_decimal_value = -curr_decimal_value;
+    i++;
+  }
+
+  int j = 0;
+  char reverse_num_str[10];
+
+  // Build the decimals parts of the string in reverse order.
+  while (curr_decimal_value > 0) {
+    char ascii = (curr_decimal_value % 10) + 48;
+    if (ascii != '0') {
+      reverse_num_str[j] = ascii;
+    }
+    curr_decimal_value /= 10;
+    j++;
+  }
+  if (j > 0) {
+    reverse_num_str[j] = '.';
+    j++;
+  }
+  // Build the integers parts of the string in reverse order.
+  while (curr_integer > 0) {
+    char ascii = (curr_integer % 10) + 48;
+    reverse_num_str[j] = ascii;
+    curr_integer /= 10;
+    j++;
+  }
+  j--;
+
+  // Transfer over in correct order.
+  while (j >= 0) {
+    dest[i] = reverse_num_str[j];
+    i++;
+    j--;
+  }
+
+  // Null terminate.
+  dest[i] = '\0';
+}
+#pragma clang diagnostic pop
+
 static int r_str_to_int(char* str, int len) {
   int result = 0;
   int is_negative = 0;
@@ -115,8 +166,8 @@ static int r_str_to_int(char* str, int len) {
 #pragma clang diagnostic ignored "-Wunused-function"
 static double r_str_to_double(char* str, int len) {
   double result = 0;
-  int is_negative = 0;
-  int processing_decimals = 0;
+  char is_negative = 0;
+  char processing_decimals = 0;
   double current_decimal_factor = 1;
   for (int i = 0; i < len; i++) {
     char ascii = str[i];
