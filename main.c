@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
         if (optarg && strlen(optarg) <= 58) {
           plates = optarg;
         }
-        char* weight = calc_plates_to_weight(plates);
+        char const* weight = calc_plates_to_weight(plates);
         printf("Weight: %s lbs\n", weight);
         return 0;
       }
@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
         if (optarg && strlen(optarg) <= 58) {
           weight = optarg;
         }
-        char* plates = calc_weight_to_plates(weight);
+        char const* plates = calc_weight_to_plates(weight);
         printf("Plates: %s lbs on each side\n", plates);
         return 0;
       }

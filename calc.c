@@ -1,5 +1,3 @@
-// TODO: Add proper const modifiers.
-
 /**
  * Buffer for the web app to write the plates user input.
  *
@@ -10,7 +8,7 @@
  */
 char js_text_input_string_buffer[60] = { 0 };
 
-static int r_str_len(char* str) {
+static int r_str_len(char const* str) {
   int len = 0;
   while (str[len] != '\0') {
     len++;
@@ -109,7 +107,7 @@ static void r_double_to_str(double v, char* dest) {
 
   // Build the decimals parts of the string in reverse order.
   while (curr_decimal_value > 0) {
-    char ascii = (curr_decimal_value % 10) + 48;
+    char const ascii = (curr_decimal_value % 10) + 48;
     if (ascii != '0') {
       reverse_num_str[j] = ascii;
       j++;
@@ -122,7 +120,7 @@ static void r_double_to_str(double v, char* dest) {
   }
   // Build the integers parts of the string in reverse order.
   while (curr_integer > 0) {
-    char ascii = (curr_integer % 10) + 48;
+    char const ascii = (curr_integer % 10) + 48;
     reverse_num_str[j] = ascii;
     j++;
     curr_integer /= 10;
@@ -148,7 +146,7 @@ static int r_str_to_int(char* str, int len) {
   int result = 0;
   int is_negative = 0;
   for (int i = 0; i < len; i++) {
-    char ascii = str[i];
+    char const ascii = str[i];
     if (ascii == ' ') {
       continue;
     }
@@ -171,13 +169,13 @@ static int r_str_to_int(char* str, int len) {
 
 // More accurate version:
 // https://github.com/R32/wasm-c/blob/daed77906372f5783b634494da09cfac7d1ea513/src/stdlib.c#L13
-static double r_str_to_double(char* str, int len) {
+static double r_str_to_double(char const* str, int len) {
   double result = 0;
   char is_negative = 0;
   char processing_decimals = 0;
   double current_decimal_factor = 1;
   for (int i = 0; i < len; i++) {
-    char ascii = str[i];
+    char const ascii = str[i];
     if (ascii == ' ') {
       continue;
     }
@@ -209,12 +207,12 @@ static void clear_calc_plates_to_weight_dest(void) {
     calc_plates_to_weight_dest[i] = 0;
   }
 }
-char* calc_plates_to_weight(char* plates) {
+char const* calc_plates_to_weight(char const* plates) {
   clear_calc_plates_to_weight_dest();
 
   double one_side_plates_total_weight = 0;
-  char* curr_start = plates;
-  char* curr_char = plates;
+  char const* curr_start = plates;
+  char const* curr_char = plates;
   int curr_len = 1;
   while (1) {
     if (r_is_digit(curr_char[0]) || curr_char[0] == '.') {
@@ -236,9 +234,9 @@ char* calc_plates_to_weight(char* plates) {
     }
   }
 
-  const double plates_total_weight = one_side_plates_total_weight * 2;
-  const double bar_weight = 45;
-  const double total_weight = bar_weight + plates_total_weight;
+  double const plates_total_weight = one_side_plates_total_weight * 2;
+  double const bar_weight = 45;
+  double const total_weight = bar_weight + plates_total_weight;
 
   r_double_to_str(total_weight, calc_plates_to_weight_dest);
   return calc_plates_to_weight_dest;
@@ -250,7 +248,7 @@ static void clear_calc_weight_to_plates_dest(void) {
     calc_weight_to_plates_dest[i] = 0;
   }
 }
-char* calc_weight_to_plates(char* weight) {
+char const* calc_weight_to_plates(char const* weight) {
   clear_calc_weight_to_plates_dest();
 
   double curr_weight = r_str_to_double(weight, r_str_len(weight));
