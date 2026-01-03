@@ -7,6 +7,8 @@
 
 // TODO: Create man page.
 
+// TODO: Add lb <-> kg conveniences.
+
 static void print_usage(void) {
   printf("Usage:\n");
   printf("  barbellcalc [-w weight | --weight weight | -p plates | "
