@@ -31,7 +31,7 @@ clean:
 
 
 ###
-# Webapp
+# Web
 ###
 
 build-wasm: calc.c
