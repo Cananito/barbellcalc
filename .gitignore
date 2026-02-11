@@ -1,4 +1,6 @@
-barbellcalc
-barbellcalc.dSYM/
+/barbellcalc
+/barbellcalc.dSYM/
 *.o
-android/gen
+/android/gen
+/android/classes.dex
+/android/lib
