@@ -14,7 +14,11 @@ BUILD_ARTIFACTS=gen classes.dex
 
 build: gen/$(APK_BASENAME).apk
 
+# TODO: List inputs to avoid aggressive caching.
 gen/$(APK_BASENAME).apk:
+ifndef KEYSTORE_PASSWORD
+	$(error Set $KEYSTORE_PASSWORD as an env variable with the KeyStore password!)
+endif
 	rm -rf $(BUILD_ARTIFACTS)
 	mkdir -p gen/res
 	mkdir -p gen/dex
@@ -25,7 +29,7 @@ gen/$(APK_BASENAME).apk:
 	unzip gen/dex/classes.zip -d gen/dex
 	zip -uj gen/$(APK_BASENAME)-unsigned.apk gen/dex/classes.dex
 	$(ZIPALIGN) -p 4 gen/$(APK_BASENAME)-unsigned.apk gen/$(APK_BASENAME)-aligned.apk
-	$(APKSIGNER) sign --ks $(ANDROID_HOME)/debug.keystore --ks-key-alias androiddebugkey --out gen/$(APK_BASENAME).apk gen/$(APK_BASENAME)-aligned.apk
+	$(APKSIGNER) sign --ks $(ANDROID_HOME)/debug.keystore --ks-pass env:KEYSTORE_PASSWORD --ks-key-alias androiddebugkey --out gen/$(APK_BASENAME).apk gen/$(APK_BASENAME)-aligned.apk
 
 install: gen/$(APK_BASENAME).apk
 	$(ADB) install -r gen/$(APK_BASENAME).apk
