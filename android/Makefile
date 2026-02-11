@@ -20,12 +20,15 @@ STRIP=$(ANDROID_HOME)/ndk/$(NDK_VERSION)/toolchains/llvm/prebuilt/darwin-x86_64/
 
 build: gen/$(APK_BASENAME).apk
 
-lib/arm64-v8a/libcalc.so: calc.o
+lib/arm64-v8a/libcalc.so: calc.o jni_calc.o
 	mkdir -p lib/arm64-v8a
-	$(CC) -shared calc.o -o lib/arm64-v8a/libcalc.so
+	$(CC) -shared calc.o jni_calc.o -o lib/arm64-v8a/libcalc.so
 
-calc.o: ../calc.c src/com/cananito/barbellcalc/jni_calc.c
-	$(CC) $(CFLAGS) -c src/com/cananito/barbellcalc/jni_calc.c -o calc.o
+jni_calc.o: ../calc.h src/com/cananito/barbellcalc/jni_calc.c
+	$(CC) $(CFLAGS) -I ../ -c src/com/cananito/barbellcalc/jni_calc.c -o jni_calc.o
+
+calc.o: ../calc.c
+	$(CC) $(CFLAGS) -c ../calc.c -o calc.o
 
 # TODO: List inputs to avoid aggressive caching.
 gen/$(APK_BASENAME).apk: lib/arm64-v8a/libcalc.so
