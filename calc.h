@@ -1,6 +1,4 @@
-// TODO: Add proper const modifiers.
-
 // TODO: Add unit tests.
 
-char* calc_plates_to_weight(char* plates);
-char* calc_weight_to_plates(char* weight);
+void calc_plates_to_weight(char* const result_dest, char const* const plates);
+void calc_weight_to_plates(char* const result_dest, char const* const weight);

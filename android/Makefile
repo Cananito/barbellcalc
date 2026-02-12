@@ -55,4 +55,5 @@ clean:
 	rm -rf gen
 	rm -rf classes.dex
 	rm -rf calc.o
+	rm -rf jni_calc.o
 	rm -rf lib

@@ -3,6 +3,7 @@
 #include "calc.h"
 
 void Java_com_cananito_barbellcalc_MainActivity_lala() {
-  char const* r = calc_weight_to_plates("155");
-  printf("Result: %s", r);
+  char result[50] = { 0 };
+  calc_weight_to_plates(result, "155");
+  printf("Result: %s", result);
 }

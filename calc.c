@@ -1,5 +1,5 @@
 /**
- * Buffer for the web app to write the plates user input.
+ * Buffer for the web app to write user input.
  *
  * Example of the longest likely string is 30 characters:
  * "45,45,45,45,45,45,25,10,5,2.5\0"
@@ -7,6 +7,7 @@
  * So we'll just double it to 60.
  */
 char js_text_input_string_buffer[60] = { 0 };
+char js_result_string_buffer[60] = { 0 };
 
 static int r_str_len(char const* str) {
   int len = 0;
@@ -201,15 +202,7 @@ static double r_str_to_double(char const* str, int len) {
   return result;
 }
 
-static char calc_plates_to_weight_dest[8] = { 0 };
-static void clear_calc_plates_to_weight_dest(void) {
-  for (int i = 0; i < 8; i++) {
-    calc_plates_to_weight_dest[i] = 0;
-  }
-}
-char const* calc_plates_to_weight(char const* plates) {
-  clear_calc_plates_to_weight_dest();
-
+void calc_plates_to_weight(char* const result_dest, char const* const plates) {
   double one_side_plates_total_weight = 0;
   char const* curr_start = plates;
   char const* curr_char = plates;
@@ -228,9 +221,8 @@ char const* calc_plates_to_weight(char const* plates) {
       break;
     } else {
       // Invalid input, return "0".
-      calc_plates_to_weight_dest[0] = '0';
-      calc_plates_to_weight_dest[1] = '\0';
-      return calc_plates_to_weight_dest;
+      result_dest[0] = '0';
+      result_dest[1] = '\0';
     }
   }
 
@@ -238,88 +230,73 @@ char const* calc_plates_to_weight(char const* plates) {
   double const bar_weight = 45;
   double const total_weight = bar_weight + plates_total_weight;
 
-  r_double_to_str(total_weight, calc_plates_to_weight_dest);
-  return calc_plates_to_weight_dest;
+  r_double_to_str(total_weight, result_dest);
 }
 
-static char calc_weight_to_plates_dest[60] = { 0 };
-static void clear_calc_weight_to_plates_dest(void) {
-  for (int i = 0; i < 60; i++) {
-    calc_weight_to_plates_dest[i] = 0;
-  }
-}
-char const* calc_weight_to_plates(char const* weight) {
-  clear_calc_weight_to_plates_dest();
-
+void calc_weight_to_plates(char* const result_dest, char const* const weight) {
   double curr_weight = r_str_to_double(weight, r_str_len(weight));
 
   if (curr_weight < 45) {
-    return calc_weight_to_plates_dest;
+    return;
   }
 
   curr_weight -= 45;
   curr_weight /= 2;
   int i = 0;
   while (curr_weight > 0) {
-    if (i >= 59) {
-      clear_calc_weight_to_plates_dest();
-      return calc_weight_to_plates_dest;
-    }
     if (curr_weight >= 45) {
-      calc_weight_to_plates_dest[i] = '4';
+      result_dest[i] = '4';
       i++;
-      calc_weight_to_plates_dest[i] = '5';
+      result_dest[i] = '5';
       i++;
-      calc_weight_to_plates_dest[i] = ',';
+      result_dest[i] = ',';
       i++;
       curr_weight -= 45;
     } else if (curr_weight >= 25) {
-      calc_weight_to_plates_dest[i] = '2';
+      result_dest[i] = '2';
       i++;
-      calc_weight_to_plates_dest[i] = '5';
+      result_dest[i] = '5';
       i++;
-      calc_weight_to_plates_dest[i] = ',';
+      result_dest[i] = ',';
       i++;
       curr_weight -= 25;
     } else if (curr_weight >= 10) {
-      calc_weight_to_plates_dest[i] = '1';
+      result_dest[i] = '1';
       i++;
-      calc_weight_to_plates_dest[i] = '0';
+      result_dest[i] = '0';
       i++;
-      calc_weight_to_plates_dest[i] = ',';
+      result_dest[i] = ',';
       i++;
       curr_weight -= 10;
     } else if (curr_weight >= 5) {
-      calc_weight_to_plates_dest[i] = '5';
+      result_dest[i] = '5';
       i++;
-      calc_weight_to_plates_dest[i] = ',';
+      result_dest[i] = ',';
       i++;
       curr_weight -= 5;
     } else if (curr_weight >= 2.5) {
-      calc_weight_to_plates_dest[i] = '2';
+      result_dest[i] = '2';
       i++;
-      calc_weight_to_plates_dest[i] = '.';
+      result_dest[i] = '.';
       i++;
-      calc_weight_to_plates_dest[i] = '5';
+      result_dest[i] = '5';
       i++;
-      calc_weight_to_plates_dest[i] = ',';
+      result_dest[i] = ',';
       i++;
       curr_weight -= 2.5;
     } else {
-      calc_weight_to_plates_dest[i] = '1';
+      result_dest[i] = '1';
       i++;
-      calc_weight_to_plates_dest[i] = ',';
+      result_dest[i] = ',';
       i++;
       curr_weight -= 1;
     }
   }
 
   // If last char is a comma, replace it with null terminator. Otherwsie append.
-  if (i > 0 && calc_weight_to_plates_dest[i-1] == ',') {
-    calc_weight_to_plates_dest[i-1] = '\0';
+  if (i > 0 && result_dest[i-1] == ',') {
+    result_dest[i-1] = '\0';
   } else {
-    calc_weight_to_plates_dest[i] = '\0';
+    result_dest[i] = '\0';
   }
-
-  return calc_weight_to_plates_dest;
 }

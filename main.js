@@ -15,9 +15,9 @@ let wasmObj;
 /**
  * WASM helper functions.
  */
-function stringFromNullTerminatedCCharPointer(cCharPointer) {
+function stringFromWASMMemoryBuffer(bufferPointer) {
   const wasmMemoryBuffer = wasmObj.instance.exports.memory.buffer;
-  let stringBuffer = new Uint8Array(wasmMemoryBuffer, cCharPointer);
+  let stringBuffer = new Uint8Array(wasmMemoryBuffer, bufferPointer);
   for (let i = 0; i < stringBuffer.byteLength; i++) {
     if (stringBuffer[i] === 0) {
       stringBuffer = stringBuffer.subarray(0, i);
@@ -52,8 +52,9 @@ function platesTextFieldEventHandler(event) {
   const exports = wasmObj.instance.exports;
   const textInputStringBuffer = exports.js_text_input_string_buffer;
   writeStringToWASMMemoryBuffer(input, textInputStringBuffer);
-  const resultPointer = exports.calc_plates_to_weight(textInputStringBuffer);
-  const result = stringFromNullTerminatedCCharPointer(resultPointer);
+  const resultStringBuffer = exports.js_result_string_buffer;
+  exports.calc_plates_to_weight(resultStringBuffer, textInputStringBuffer);
+  const result = stringFromWASMMemoryBuffer(resultStringBuffer);
   weightTextField.value = result;
 }
 
@@ -67,8 +68,9 @@ function weightTextFieldEventHandler(event) {
   const exports = wasmObj.instance.exports;
   const textInputStringBuffer = exports.js_text_input_string_buffer;
   writeStringToWASMMemoryBuffer(input, textInputStringBuffer);
-  const resultPointer = exports.calc_weight_to_plates(textInputStringBuffer);
-  const result = stringFromNullTerminatedCCharPointer(resultPointer);
+  const resultStringBuffer = exports.js_result_string_buffer;
+  exports.calc_weight_to_plates(resultStringBuffer, textInputStringBuffer);
+  const result = stringFromWASMMemoryBuffer(resultStringBuffer);
   platesTextField.value = result;
 }
 
