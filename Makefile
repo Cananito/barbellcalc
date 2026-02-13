@@ -30,6 +30,7 @@ clean:
 	rm -rf barbellcalc.dSYM/
 
 
+# TODO: Move to a webapp subdir after migrating away from GitHub pages.
 ###
 # Web
 ###
