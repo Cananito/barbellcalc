@@ -24,8 +24,8 @@ lib/arm64-v8a/libcalc.so: calc.o jni_calc.o
 	mkdir -p lib/arm64-v8a
 	$(CC) -shared calc.o jni_calc.o -o lib/arm64-v8a/libcalc.so
 
-jni_calc.o: ../calc.h src/com/cananito/barbellcalc/jni_calc.c
-	$(CC) $(CFLAGS) -I ../ -c src/com/cananito/barbellcalc/jni_calc.c -o jni_calc.o
+jni_calc.o: ../calc.h src/jni_calc.c
+	$(CC) $(CFLAGS) -I ../ -c src/jni_calc.c -o jni_calc.o
 
 calc.o: ../calc.c
 	$(CC) $(CFLAGS) -c ../calc.c -o calc.o
@@ -40,7 +40,7 @@ endif
 	mkdir -p gen/dex
 	$(AAPT) compile --dir res -o gen/res/
 	$(AAPT) link -I $(ANDROID_CLASS_PATH) --manifest AndroidManifest.xml --target-sdk-version 34 --java gen gen/res/*.flat -o gen/$(APK_BASENAME)-unsigned.apk
-	javac -classpath $(ANDROID_CLASS_PATH) -d gen/classes src/com/cananito/barbellcalc/MainActivity.java gen/com/cananito/barbellcalc/R.java
+	javac -classpath $(ANDROID_CLASS_PATH) -d gen/classes src/MainActivity.java gen/com/cananito/barbellcalc/R.java
 	$(D8) --lib $(ANDROID_CLASS_PATH) --output gen/dex/classes.zip gen/classes/com/cananito/barbellcalc/*.class
 	unzip gen/dex/classes.zip -d gen/dex
 	zip -uj gen/$(APK_BASENAME)-unsigned.apk gen/dex/classes.dex
