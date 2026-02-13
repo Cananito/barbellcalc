@@ -38,7 +38,7 @@ $ make build-wasm
 In my case, since my default Clang doesn't support WASM ouput, I do:
 
 ```
-$ make CC=/Users/rogeliogudino/repos/llvm-project/build/bin/clang build-wasm
+$ make CC=/Users/rogeliogudino/android/ndk/29.0.14206865/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang build-wasm
 ```
 
 To start the web app server:
