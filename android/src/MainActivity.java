@@ -24,6 +24,8 @@ public class MainActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    // TODO: Remove focus from EditTexts when dismissing keyboard or tapping outside of them.
+
     LinearLayout linearLayout = new LinearLayout(this);
     linearLayout.setOrientation(LinearLayout.VERTICAL);
     linearLayout.setLayoutParams(new LinearLayout.LayoutParams(
@@ -36,6 +38,7 @@ public class MainActivity extends Activity {
         LayoutParams.MATCH_PARENT,
         LayoutParams.WRAP_CONTENT));
 
+    // TODO: Restrict keyboard to numbers and symbols.
     platesEditText = new EditText(this);
     platesEditText.setLayoutParams(new LayoutParams(
         LayoutParams.MATCH_PARENT,
@@ -46,9 +49,9 @@ public class MainActivity extends Activity {
       }
       @Override
       public void afterTextChanged(Editable s) {
-        CharSequence current = weightEditText.getText();
-        if (CharSequence.compare(current, s) != 0) {
-          weightEditText.setText(s);
+        if (platesEditText.isFocused()) {
+          String weight = platesToWeight(s.toString());
+          weightEditText.setText(weight);
         }
       }
       @Override
@@ -62,6 +65,7 @@ public class MainActivity extends Activity {
         LayoutParams.MATCH_PARENT,
         LayoutParams.WRAP_CONTENT));
 
+    // TODO: Restrict keyboard to numbers.
     weightEditText = new EditText(this);
     weightEditText.setLayoutParams(new LayoutParams(
         LayoutParams.MATCH_PARENT,
@@ -72,9 +76,9 @@ public class MainActivity extends Activity {
       }
       @Override
       public void afterTextChanged(Editable s) {
-        CharSequence current = platesEditText.getText();
-        if (CharSequence.compare(current, s) != 0) {
-          platesEditText.setText(s);
+        if (weightEditText.isFocused()) {
+          String plates = weightToPlates(s.toString());
+          platesEditText.setText(plates);
         }
       }
       @Override
@@ -87,8 +91,5 @@ public class MainActivity extends Activity {
     linearLayout.addView(weightTextView);
     linearLayout.addView(weightEditText);
     setContentView(linearLayout);
-
-    String plates = weightToPlates("255");
-    String weight = platesToWeight("45,45");
   }
 }
