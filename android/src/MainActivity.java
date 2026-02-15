@@ -7,7 +7,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-  public native void lala();
+  public native String weightToPlates(String weight);
+  public native String platesToWeight(String plates);
 
   static {
     System.loadLibrary("calc");
@@ -16,6 +17,7 @@ public class MainActivity extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
     RelativeLayout relativeLayout = new RelativeLayout(this);
     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
         RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -25,6 +27,8 @@ public class MainActivity extends Activity {
     textView.setLayoutParams(layoutParams);
     relativeLayout.addView(textView);
     setContentView(relativeLayout);
-    lala();
+
+    String plates = weightToPlates("255");
+    String weight = platesToWeight("45,45");
   }
 }
