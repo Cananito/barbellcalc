@@ -1,11 +1,15 @@
 package com.cananito.barbellcalc;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,8 +27,6 @@ public class MainActivity extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    // TODO: Remove focus from EditTexts when dismissing keyboard or tapping outside of them.
 
     LinearLayout linearLayout = new LinearLayout(this);
     linearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -91,5 +93,20 @@ public class MainActivity extends Activity {
     linearLayout.addView(weightTextView);
     linearLayout.addView(weightEditText);
     setContentView(linearLayout);
+  }
+
+  @Override
+  public boolean dispatchTouchEvent (MotionEvent ev) {
+    if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+      View view = this.getCurrentFocus();
+      if (view != null) {
+        InputMethodManager inputMethodManager =
+          (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        platesEditText.clearFocus();
+        weightEditText.clearFocus();
+      }
+    }
+    return super.dispatchTouchEvent(ev);
   }
 }
