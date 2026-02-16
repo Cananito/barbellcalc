@@ -238,6 +238,14 @@ void calc_weight_to_plates(char* const result_dest, char const* const weight) {
   double curr_weight = r_str_to_double(weight, r_str_len(weight));
 
   if (curr_weight < 45) {
+    result_dest[0] = '\0';
+    return;
+  }
+
+  // 2227.5 is the max weight before the plates string overflows the 60-wide
+  // JavaScript input buffer.
+  if (curr_weight > 2225) {
+    result_dest[0] = '\0';
     return;
   }
 

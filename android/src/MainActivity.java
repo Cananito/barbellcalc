@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,8 +42,10 @@ public class MainActivity extends Activity {
         LayoutParams.MATCH_PARENT,
         LayoutParams.WRAP_CONTENT));
 
-    // TODO: Restrict keyboard to numbers and symbols.
+    InputFilter[] platesEditTextFilters = new InputFilter[1];
+    platesEditTextFilters[0] = new InputFilter.LengthFilter(58); // Rough upper limit.
     platesEditText = new EditText(this);
+    platesEditText.setFilters(platesEditTextFilters);
     platesEditText.setLayoutParams(new LayoutParams(
         LayoutParams.MATCH_PARENT,
         LayoutParams.WRAP_CONTENT));
@@ -67,8 +71,10 @@ public class MainActivity extends Activity {
         LayoutParams.MATCH_PARENT,
         LayoutParams.WRAP_CONTENT));
 
-    // TODO: Restrict keyboard to numbers.
+    InputFilter[] weightEditTextFilters = new InputFilter[1];
+    weightEditTextFilters[0] = new InputFilter.LengthFilter(4); // Rough upper limit.
     weightEditText = new EditText(this);
+    weightEditText.setFilters(weightEditTextFilters);
     weightEditText.setLayoutParams(new LayoutParams(
         LayoutParams.MATCH_PARENT,
         LayoutParams.WRAP_CONTENT));

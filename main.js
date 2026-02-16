@@ -45,7 +45,7 @@ function writeStringToWASMMemoryBuffer(string, destinationBufferPointer) {
 function platesTextFieldEventHandler(event) {
   const input = platesTextField.value;
   if (input.length > 58) {
-    // Prevent overflow of js_text_input_string_buffer;
+    // Prevent overflow of js_text_input_string_buffer, and rough upper limit.
     weightTextField.value = "";
     return;
   }
@@ -60,8 +60,8 @@ function platesTextFieldEventHandler(event) {
 
 function weightTextFieldEventHandler(event) {
   const input = weightTextField.value;
-  if (input.length > 58) {
-    // Prevent overflow of js_text_input_string_buffer;
+  if (input.length > 4) {
+    // Prevent overflow of js_text_input_string_buffer, and rough upper limit
     platesTextField.value = "";
     return;
   }
