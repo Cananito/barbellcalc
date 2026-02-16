@@ -38,6 +38,7 @@ public class MainActivity extends Activity {
 
     TextView platesTextView = new TextView(this);
     platesTextView.setText("Plates (lbs):");
+    platesTextView.setTextSize(30);
     platesTextView.setLayoutParams(new LayoutParams(
         LayoutParams.MATCH_PARENT,
         LayoutParams.WRAP_CONTENT));
@@ -45,6 +46,7 @@ public class MainActivity extends Activity {
     InputFilter[] platesEditTextFilters = new InputFilter[1];
     platesEditTextFilters[0] = new InputFilter.LengthFilter(58); // Rough upper limit.
     platesEditText = new EditText(this);
+    platesEditText.setTextSize(45);
     platesEditText.setFilters(platesEditTextFilters);
     platesEditText.setLayoutParams(new LayoutParams(
         LayoutParams.MATCH_PARENT,
@@ -67,6 +69,7 @@ public class MainActivity extends Activity {
 
     TextView weightTextView = new TextView(this);
     weightTextView.setText("Weight (lbs):");
+    weightTextView.setTextSize(30);
     weightTextView.setLayoutParams(new LayoutParams(
         LayoutParams.MATCH_PARENT,
         LayoutParams.WRAP_CONTENT));
@@ -74,6 +77,7 @@ public class MainActivity extends Activity {
     InputFilter[] weightEditTextFilters = new InputFilter[1];
     weightEditTextFilters[0] = new InputFilter.LengthFilter(4); // Rough upper limit.
     weightEditText = new EditText(this);
+    weightEditText.setTextSize(45);
     weightEditText.setFilters(weightEditTextFilters);
     weightEditText.setLayoutParams(new LayoutParams(
         LayoutParams.MATCH_PARENT,
