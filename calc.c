@@ -223,6 +223,7 @@ void calc_plates_to_weight(char* const result_dest, char const* const plates) {
       // Invalid input, return "0".
       result_dest[0] = '0';
       result_dest[1] = '\0';
+      return;
     }
   }
 
