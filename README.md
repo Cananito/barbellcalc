@@ -1,5 +1,6 @@
 # barbellcalc
-Webapp and CLI for barbell weight and plate calculation.
+
+CLI, webapp, and Android app for barbell weight and plate calculation.
 
 ## Dev Set Up
 
@@ -9,7 +10,7 @@ Requirements:
 1. Make
 1. Python3 (for local serving of the web app)
 
-## Building and Running
+## CLI
 
 To build the CLI:
 
@@ -28,6 +29,8 @@ To delete the CLI compilation artifacts:
 ```
 $ make clean
 ```
+
+## Webapp
 
 To build the web app's WASM file:
 
@@ -48,3 +51,29 @@ $ make server
 ```
 
 To run the web app, open http://localhost:9999 in your web browser.
+
+## Android
+
+Pre-requisite:
+
+```
+$ cd android/
+```
+
+To build the Android app:
+
+```
+$ make build
+```
+
+To deploy the Android app to a local emulator or device:
+
+```
+$ make install
+```
+
+To delete the Android app compilation artifacts:
+
+```
+$ make clean
+```
