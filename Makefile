@@ -40,7 +40,3 @@ build-wasm: calc.c
 
 build-wasm-debug: calc.c
 	$(CC) -O0 -g --target=wasm32 -nostdlib -Wl,--no-entry -Wl,--export-all -Wl,--allow-undefined -o calc.wasm calc.c
-
-server:
-	python3 -m http.server 9999
-

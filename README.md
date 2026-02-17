@@ -44,13 +44,7 @@ In my case, since my default Clang doesn't support WASM ouput, I do:
 $ make CC=/Users/rogeliogudino/android/ndk/29.0.14206865/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang build-wasm
 ```
 
-To start the web app server:
-
-```
-$ make server
-```
-
-To run the web app, open http://localhost:9999 in your web browser.
+Start a local server to serve the webapp directory (`nginx -p .` or `python3 -m http.server 9999` e.g.).
 
 ## Android
 
