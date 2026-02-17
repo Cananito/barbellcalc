@@ -56,7 +56,6 @@ Start a local server to serve the webapp directory (`nginx -p .` or `python3 -m 
 Requirements:
 
 1. Android's [cmdline-tools](https://developer.android.com/studio#command-line-tools-only)
-  * TODO: setup info?
 1. JDK
 1. Make
 
