@@ -4,13 +4,12 @@ CLI, webapp, and Android app for barbell weight and plate calculation.
 
 ## Dev Set Up
 
+## CLI
+
 Requirements:
 
-1. A C compiler that supports WASM output
+1. A C compiler
 1. Make
-1. Python3 (for local serving of the web app)
-
-## CLI
 
 To build the CLI:
 
@@ -32,6 +31,12 @@ $ make clean
 
 ## Webapp
 
+Requirements:
+
+1. A C compiler that supports WASM output (Android's NDK supports it)
+1. Make
+1. Something to setup a local server to serve the webapp
+
 To build the web app's WASM file:
 
 ```
@@ -47,6 +52,13 @@ $ make CC=/Users/rogeliogudino/android/ndk/29.0.14206865/toolchains/llvm/prebuil
 Start a local server to serve the webapp directory (`nginx -p .` or `python3 -m http.server 9999` e.g.).
 
 ## Android
+
+Requirements:
+
+1. Android's [cmdline-tools](https://developer.android.com/studio#command-line-tools-only)
+  * TODO: setup info?
+1. JDK
+1. Make
 
 Pre-requisite:
 
