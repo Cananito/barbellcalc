@@ -47,10 +47,12 @@ gen/res/values_strings.arsc.flat gen/res/values_styles.arsc.flat: res/values/str
 	mkdir -p gen/res/
 	$(AAPT) compile --dir res -o gen/res/
 
+# TODO: Stop listing out nested classes.
 gen/dex/classes.zip: gen/classes/com/cananito/barbellcalc/MainActivity.class gen/classes/com/cananito/barbellcalc/MainActivity$$1.class gen/classes/com/cananito/barbellcalc/MainActivity$$2.class gen/classes/com/cananito/barbellcalc/R.class gen/classes/com/cananito/barbellcalc/R$$string.class gen/classes/com/cananito/barbellcalc/R$$style.class
 	mkdir -p gen/dex
 	$(D8) --lib $(ANDROID_CLASS_PATH) --output gen/dex/classes.zip gen/classes/com/cananito/barbellcalc/*.class
 
+# TODO: Stop listing out nested classes.
 gen/classes/com/cananito/barbellcalc/MainActivity.class gen/classes/com/cananito/barbellcalc/MainActivity$$1.class gen/classes/com/cananito/barbellcalc/MainActivity$$2.class gen/classes/com/cananito/barbellcalc/R.class gen/classes/com/cananito/barbellcalc/R$$string.class gen/classes/com/cananito/barbellcalc/R$$style.class: src/MainActivity.java gen/com/cananito/barbellcalc/R.java
 	javac -classpath $(ANDROID_CLASS_PATH) -d gen/classes src/MainActivity.java gen/com/cananito/barbellcalc/R.java
 
